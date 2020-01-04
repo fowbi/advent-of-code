@@ -55,25 +55,48 @@ func execOpcode(opcode int, a int, b int) int {
 	return 1
 }
 
+func calcOutput(memory []int, noun int, verb int) int {
+	memory[1] = noun
+	memory[2] = verb
+
+	for i := 1; i <= len(memory); i++ {
+		if i%4 == 0 || i == 0 {
+			if memory[i] == 99 {
+				break
+			}
+
+			memory[memory[i+3]] = execOpcode(memory[i], memory[memory[i+1]], memory[memory[i+2]])
+		}
+	}
+
+	return memory[0]
+}
+
+func findNounVerb(inputAsInts []int, match int) int {
+	for noun := 1; noun <= 99; noun++ {
+		for verb := 1; verb <= 99; verb++ {
+			memory := make([]int, len(inputAsInts))
+			copy(memory, inputAsInts)
+			var output = calcOutput(memory, noun, verb)
+
+			if output == match {
+				return (100 * noun) + verb
+			}
+		}
+	}
+
+	return 0
+}
+
 func main() {
 	var input = readInput("input.txt")
 	var inputAsInts = splitAndExtractInts(input)
 
-	inputAsInts[1] = 12
-	inputAsInts[2] = 2
+	memory := make([]int, len(inputAsInts))
+	copy(memory, inputAsInts)
+	var output = calcOutput(memory, 12, 2)
 
-	var i = 0
-	for _, pos := range inputAsInts {
-		if i%4 == 0 || i == 0 {
-			if pos == 99 {
-				break
-			}
+	fmt.Println("solution part 1 :", output)
 
-			inputAsInts[inputAsInts[i+3]] = execOpcode(pos, inputAsInts[inputAsInts[i+1]], inputAsInts[inputAsInts[i+2]])
-		}
-
-		i++
-	}
-
-	fmt.Println(inputAsInts[0])
+	fmt.Println("solution part 2 :", findNounVerb(inputAsInts, 19690720))
 }
