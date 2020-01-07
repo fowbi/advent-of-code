@@ -82,4 +82,50 @@ func main() {
 	}
 
 	fmt.Println("solution part 1 :", check)
+
+	picture := make([][]uint8, height)
+	for i := range picture {
+		picture[i] = make([]uint8, width)
+	}
+
+	// make everything transparent
+	for x, row := range picture {
+		for y := range row {
+			picture[x][y] = 2
+		}
+	}
+
+	for x, row := range picture {
+		for y := range row {
+			for _, layer := range layers {
+				var line = layer.lines[x]
+				l := strings.Split(line, "")
+
+				switch l[y] {
+				case "0":
+					if picture[x][y] == 2 {
+						picture[x][y] = 0
+					}
+					break
+				case "1":
+					if picture[x][y] == 2 {
+						picture[x][y] = 1
+					}
+					break
+				}
+			}
+		}
+	}
+
+	fmt.Println("solution part 2 :")
+	for _, row := range picture {
+		for _, pixel := range row {
+			if pixel == 1 {
+				fmt.Print("*")
+			} else {
+				fmt.Print(" ")
+			}
+		}
+		fmt.Println("")
+	}
 }
