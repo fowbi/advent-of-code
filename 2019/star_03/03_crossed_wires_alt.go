@@ -96,6 +96,7 @@ func main() {
 	var input = readInput("input.txt")
 
 	distances := []float64{}
+	steps := []float64{}
 	wires := [][]*Point{}
 
 	scanner := bufio.NewScanner(strings.NewReader(input))
@@ -108,17 +109,20 @@ func main() {
 	wireA := wires[0]
 	wireB := wires[1]
 
-	for _, pointA := range wireA {
-		for _, pointB := range wireB {
+	for x, pointA := range wireA {
+		for y, pointB := range wireB {
 			if comparePoints(pointA, pointB) {
 				var d = calcDistanceFromCenter(pointA)
 				if d != 0 {
 					distances = append(distances, d)
+					steps = append(steps, float64(x+y))
 				}
 			}
 		}
 	}
 
 	sort.Float64s(distances)
+	sort.Float64s(steps)
 	fmt.Println("solution part 1 :", distances[0])
+	fmt.Println("solution part 2 :", steps[0])
 }
