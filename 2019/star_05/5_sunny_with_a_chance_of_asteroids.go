@@ -16,10 +16,9 @@ const (
 )
 
 type OpCode struct {
-	op           int
-	modeLocation Mode
-	modeArgA     Mode
-	modeArgB     Mode
+	op       int
+	modeArgA Mode
+	modeArgB Mode
 }
 
 func readInput(filename string) string {
@@ -66,7 +65,6 @@ func getOpCode(opCode int) OpCode {
 
 	return OpCode{
 		opCode % 100,
-		PositionMode,
 		determineMode(string(o[2])),
 		determineMode(string(o[1])),
 	}
@@ -105,12 +103,54 @@ func runOps(ops []int, inputInstruction int) []int {
 		case 3:
 			location := ops[pointer+1]
 			argA := inputInstruction
+
 			ops[location] = argA
 			pointer += 2
 		case 4:
 			location := ops[pointer+1]
 			diagnostics = append(diagnostics, ops[location])
+
 			pointer += 2
+		case 5:
+			argA := loadArg(ops, pointer+1, opCode.modeArgA)
+			argB := loadArg(ops, pointer+2, opCode.modeArgB)
+
+			if ops[argA] != 0 {
+				pointer = ops[argB]
+			} else {
+				pointer += 3
+			}
+		case 6:
+			argA := loadArg(ops, pointer+1, opCode.modeArgA)
+			argB := loadArg(ops, pointer+2, opCode.modeArgB)
+
+			if ops[argA] == 0 {
+				pointer = ops[argB]
+			} else {
+				pointer += 3
+			}
+		case 7:
+			location := ops[pointer+3]
+			argA := loadArg(ops, pointer+1, opCode.modeArgA)
+			argB := loadArg(ops, pointer+2, opCode.modeArgB)
+
+			if ops[argA] < ops[argB] {
+				ops[location] = 1
+			} else {
+				ops[location] = 0
+			}
+			pointer += 4
+		case 8:
+			location := ops[pointer+3]
+			argA := loadArg(ops, pointer+1, opCode.modeArgA)
+			argB := loadArg(ops, pointer+2, opCode.modeArgB)
+
+			if ops[argA] == ops[argB] {
+				ops[location] = 1
+			} else {
+				ops[location] = 0
+			}
+			pointer += 4
 		case 99:
 			return diagnostics
 		}
@@ -119,9 +159,9 @@ func runOps(ops []int, inputInstruction int) []int {
 
 func main() {
 	input := readInput("input.txt")
+	input = strings.TrimRight(input, "\n")
 	ops := splitAndExtractInts(input)
 
-	inputInstruction := 1
-
-	fmt.Println("Solution part 1 :", runOps(ops, inputInstruction))
+	fmt.Println("Solution part 1 :", runOps(append(ops[:0:0], ops...), 1))
+	fmt.Println("Solution part 2 :", runOps(append(ops[:0:0], ops...), 5))
 }
