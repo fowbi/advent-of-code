@@ -8,10 +8,18 @@ import (
 	"strings"
 )
 
+type Mode string
+
+const (
+	PositionMode  Mode = "position"
+	ImmediateMode Mode = "immediate"
+)
+
 type OpCode struct {
-	op            int
-	positionMode  bool
-	immediateMode bool
+	op           int
+	modeLocation Mode
+	modeArgA     Mode
+	modeArgB     Mode
 }
 
 func readInput(filename string) string {
@@ -36,11 +44,43 @@ func splitAndExtractInts(input string) []int {
 	return list
 }
 
-func getOpCode(opCode int) OpCode {
-	return OpCode{opCode, true, false}
+func PadLeft(str, pad string, lenght int) string {
+	for {
+		str = pad + str
+		if len(str) >= lenght {
+			return str[0:lenght]
+		}
+	}
 }
 
-func runOps(ops []int) []int {
+func determineMode(opCode string) Mode {
+	if opCode == "1" {
+		return ImmediateMode
+	}
+
+	return PositionMode
+}
+
+func getOpCode(opCode int) OpCode {
+	o := PadLeft(strconv.Itoa(opCode), "0", 5)
+
+	return OpCode{
+		opCode % 100,
+		PositionMode,
+		determineMode(string(o[2])),
+		determineMode(string(o[1])),
+	}
+}
+
+func loadArg(ops []int, pointer int, mode Mode) int {
+	if mode == PositionMode {
+		return ops[pointer]
+	} else {
+		return pointer
+	}
+}
+
+func runOps(ops []int, inputInstruction int) []int {
 	diagnostics := []int{}
 
 	pointer := 0
@@ -50,16 +90,27 @@ func runOps(ops []int) []int {
 		switch opCode.op {
 		case 1:
 			location := ops[pointer+3]
-			argA := ops[pointer+1]
-			argB := ops[pointer+2]
+			argA := loadArg(ops, pointer+1, opCode.modeArgA)
+			argB := loadArg(ops, pointer+2, opCode.modeArgB)
+
 			ops[location] = ops[argA] + ops[argB]
 			pointer += 4
 		case 2:
 			location := ops[pointer+3]
-			argA := ops[pointer+1]
-			argB := ops[pointer+2]
+			argA := loadArg(ops, pointer+1, opCode.modeArgA)
+			argB := loadArg(ops, pointer+2, opCode.modeArgB)
+
 			ops[location] = ops[argA] * ops[argB]
 			pointer += 4
+		case 3:
+			location := ops[pointer+1]
+			argA := inputInstruction
+			ops[location] = argA
+			pointer += 2
+		case 4:
+			location := ops[pointer+1]
+			diagnostics = append(diagnostics, ops[location])
+			pointer += 2
 		case 99:
 			return diagnostics
 		}
@@ -67,12 +118,10 @@ func runOps(ops []int) []int {
 }
 
 func main() {
-	input := readInput("input-test.txt")
+	input := readInput("input.txt")
 	ops := splitAndExtractInts(input)
 
-	ops[1] = 12
-	ops[2] = 2
+	inputInstruction := 1
 
-	fmt.Println("Solution part 1 :", runOps(ops))
-	fmt.Println(ops[0])
+	fmt.Println("Solution part 1 :", runOps(ops, inputInstruction))
 }
