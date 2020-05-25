@@ -7,80 +7,92 @@ import (
 )
 
 type Point struct {
-	x float64
-	y float64
+	x int
+	y int
 }
 
-func getNextPoint(p Point, s string) Point {
+type Keypad struct {
+	mapping [][]string
+	max     int
+}
+
+func getNextPoint(p Point, s string, keypad Keypad) Point {
 	nextPoint := p
 
 	switch string(s) {
 	case "L":
-		nextPoint.x -= 1
-	case "R":
-		nextPoint.x += 1
-	case "D":
 		nextPoint.y -= 1
-	default: // U
+	case "R":
 		nextPoint.y += 1
+	case "D":
+		nextPoint.x += 1
+	default: // U
+		nextPoint.x -= 1
 	}
 
-	if outOfBounds(nextPoint) {
+	if outOfBounds(nextPoint, keypad.max) {
+		return p
+	}
+
+	key := determineKey(nextPoint, keypad)
+	if key == "" {
 		return p
 	}
 
 	return nextPoint
 }
 
-func outOfBounds(p Point) bool {
-	return (p.x > 1 || p.x < -1 || p.y > 1 || p.y < -1)
+func outOfBounds(p Point, max int) bool {
+	return (p.x > max || p.x < 0 || p.y > max || p.y < 0)
 }
 
-func determineKey(p Point) int {
-	if p.x == -1 && p.y == 1 {
-		return 1
-	}
-
-	if p.x == 0 && p.y == 1 {
-		return 2
-	}
-
-	if p.x == 1 && p.y == 1 {
-		return 3
-	}
-
-	if p.x == -1 && p.y == 0 {
-		return 4
-	}
-
-	if p.x == 0 && p.y == 0 {
-		return 5
-	}
-
-	if p.x == 1 && p.y == 0 {
-		return 6
-	}
-
-	if p.x == -1 && p.y == -1 {
-		return 7
-	}
-
-	if p.x == 0 && p.y == -1 {
-		return 8
-	}
-
-	return 9
+func determineKey(p Point, keypad Keypad) string {
+	a := keypad.mapping[p.x][p.y]
+	return a
 }
 
 func main() {
 	lines := tools.ReadLines("input.txt")
 
-	p := Point{0, 0}
+	p := Point{1, 1}
 
+	keypad := Keypad{
+		[][]string{
+			{"1", "2", "3"},
+			{"4", "5", "6"},
+			{"7", "8", "9"},
+		},
+		2,
+	}
+
+	codePartOne := ""
 	for _, line := range lines {
 		for _, char := range line {
-			p = getNextPoint(p, string(char))
+			p = getNextPoint(p, string(char), keypad)
 		}
-		fmt.Println(p, determineKey(p))
+		codePartOne += determineKey(p, keypad)
 	}
+	fmt.Println("Solution part 1 :", codePartOne)
+
+	p = Point{2, 0}
+
+	keypad = Keypad{
+		[][]string{
+			{"", "", "1", "", ""},
+			{"", "2", "3", "4", ""},
+			{"5", "6", "7", "8", "9"},
+			{"", "A", "B", "C", ""},
+			{"", "", "D", "", ""},
+		},
+		4,
+	}
+
+	codePartTwo := ""
+	for _, line := range lines {
+		for _, char := range line {
+			p = getNextPoint(p, string(char), keypad)
+		}
+		codePartTwo += determineKey(p, keypad)
+	}
+	fmt.Println("Solution part 2 :", codePartTwo)
 }
