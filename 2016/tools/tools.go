@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"io/ioutil"
+	"strconv"
 	"strings"
 )
 
@@ -38,4 +39,12 @@ func ReadLines(filename string) []string {
 	}
 
 	return lines
+}
+
+func Atoi(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		panic(err)
+	}
+	return i
 }
