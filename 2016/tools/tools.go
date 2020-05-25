@@ -1,6 +1,7 @@
 package tools
 
 import (
+	"bufio"
 	"bytes"
 	"io/ioutil"
 	"strings"
@@ -25,4 +26,16 @@ func Abs(x float64) float64 {
 		return -x
 	}
 	return x
+}
+
+func ReadLines(filename string) []string {
+	var input = ReadInput(filename)
+	scanner := bufio.NewScanner(strings.NewReader(input))
+
+	var lines []string
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	return lines
 }
