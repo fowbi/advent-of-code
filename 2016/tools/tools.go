@@ -48,3 +48,15 @@ func Atoi(s string) int {
 	}
 	return i
 }
+
+func Caesar(r rune, shift int) rune {
+	// Shift character by specified number of places.
+	// ... If beyond range, shift backward or forward.
+	s := int(r) + shift
+	if s > 'z' {
+		return rune(s - 26)
+	} else if s < 'a' {
+		return rune(s + 26)
+	}
+	return rune(s)
+}
