@@ -1,6 +1,4 @@
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
+use adventofcode_2023::run;
 use std::collections::HashMap;
 use regex::Regex;
 
@@ -60,26 +58,26 @@ fn extract_numbers_part_2(text: &str) -> Vec<char> {
     numbers
 }
 
-fn main() {
-    let mut total_part_1 = 0;
-    let mut total_part_2 = 0;
-    if let Ok(lines) = read_lines("./input.txt") {
-        for line in lines {
-            if let Ok(ip) = line {
-                let numbers = extract_numbers_part_1(&ip);
-                total_part_1 += format!("{}{}", numbers[0], numbers.last().unwrap()).parse::<i32>().unwrap();
-                let numbers_part_2 = extract_numbers_part_2(&ip);
-                let c = format!("{}{}", numbers_part_2[0], numbers_part_2.last().unwrap()).parse::<i32>().unwrap();
-                total_part_2 += c;
-            }
-        }
+fn part1(input: &str) {
+    let mut total = 0;
+    for line in input.lines() {
+        let numbers = extract_numbers_part_1(&line);
+        total += format!("{}{}", numbers[0], numbers.last().unwrap()).parse::<i32>().unwrap();
     }
-    println!("Total Part 1: {}", total_part_1);
-    println!("Total Part 2: {}", total_part_2);
+    println!("Day 1 Part 1: {}", total);
 }
 
-fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where P: AsRef<Path>, {
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
+fn part2(input: &str) {
+    let mut total = 0;
+    for line in input.lines() {
+        let numbers_part_2 = extract_numbers_part_2(&line);
+        let c = format!("{}{}", numbers_part_2[0], numbers_part_2.last().unwrap()).parse::<i32>().unwrap();
+        total += c;
+    }
+    println!("Day 1 Part 2: {}", total);
+}
+
+fn main() {
+    run(part1);
+    run(part2);
 }
