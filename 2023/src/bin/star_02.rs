@@ -1,4 +1,5 @@
 use adventofcode_2023::run;
+use std::cmp::max;
 
 fn get_game_number(game: &str) -> i32 {
     let digits = game
@@ -64,7 +65,19 @@ fn part1(input: &str) {
 }
 
 fn part2(input: &str) {
-    let total = 0;
+    let mut total = 0;
+    for line in input.lines() {
+        let (_, rounds): (i32, Vec<(i32, i32, i32)>) = parse_line(line);
+        let mut minimum_red_cubes = 0;
+        let mut minimum_green_cubes = 0;
+        let mut minimum_blue_cubes = 0;
+        for round in rounds {
+            minimum_red_cubes = max(minimum_red_cubes, round.0);
+            minimum_green_cubes = max(minimum_green_cubes, round.1);
+            minimum_blue_cubes = max(minimum_blue_cubes, round.2);
+        }
+        total += minimum_red_cubes * minimum_green_cubes * minimum_blue_cubes;
+    }
 
     println!("Day 2 Part 2: {}", total);
 }
