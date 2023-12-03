@@ -54,7 +54,6 @@ fn part1(input: &str) {
         let (game, rounds): (i32, Vec<(i32, i32, i32)>) = parse_line(line);
         for round in rounds {
             if round.0 > red_cubes || round.1 > green_cubes || round.2 > blue_cubes {
-                println!("Game {} ({} {} {})({} {} {})", game, red_cubes, green_cubes, blue_cubes, round.0, round.1, round.2);
                 continue 'outer;
             }
         }
