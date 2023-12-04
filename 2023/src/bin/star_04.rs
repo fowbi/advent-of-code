@@ -25,7 +25,6 @@ fn part1(input: &str) {
 }
 
 fn part2(input: &str) {
-    let mut total = 0;
     let mut num_of_cards = vec![1; input.lines().count()];
     for (card, line) in input.lines().enumerate() {
         let (winning_numbers, my_numbers) = get_numbers(line);
@@ -39,9 +38,8 @@ fn part2(input: &str) {
             num_of_cards[card + 1 + i] += 1 * num_of_cards[card];
         }
     }
-    total += num_of_cards.iter().fold(0, |acc, x| acc + x);
 
-    println!("Day 2 Part 2: {}", total);
+    println!("Day 2 Part 2: {}", num_of_cards.iter().fold(0, |acc, x| acc + x));
 }
 
 fn main() {
