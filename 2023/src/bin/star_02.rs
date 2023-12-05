@@ -44,7 +44,7 @@ fn parse_round(round: &str) -> (i32, i32, i32) {
     (red, green, blue)
 }
 
-fn part1(input: &str) {
+fn part1(input: &str) -> i32 {
     let red_cubes = 12;
     let green_cubes = 13;
     let blue_cubes = 14;
@@ -60,10 +60,10 @@ fn part1(input: &str) {
         total += game;
     }
 
-    println!("Day 2 Part 1: {}", total);
+    total
 }
 
-fn part2(input: &str) {
+fn part2(input: &str) -> i32 {
     let mut total = 0;
     for line in input.lines() {
         let (_, rounds): (i32, Vec<(i32, i32, i32)>) = parse_line(line);
@@ -78,10 +78,41 @@ fn part2(input: &str) {
         total += minimum_red_cubes * minimum_green_cubes * minimum_blue_cubes;
     }
 
-    println!("Day 2 Part 2: {}", total);
+    total
 }
 
 fn main() {
-    run(part1);
-    run(part2);
+    fn run_part1(input: &str) {
+        println!("Day 2 Part 1: {}", part1(input));
+    }
+    run(run_part1);
+
+    fn run_part2(input: &str) {
+        println!("Day 2 Part 2: {}", part2(input));
+    }
+    run(run_part2);
+}
+
+#[cfg(test)]
+mod tests {
+    use rstest::rstest;
+    use super::{part1, part2};
+
+    const INPUT_1: &str = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
+Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
+Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
+Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green";
+
+    #[rstest]
+    #[case(INPUT_1, 8)]
+    fn star_02_part1(#[case] input: &str, #[case] expected_output: i32) {
+        assert_eq!(part1(&input), expected_output);
+    }
+
+    #[rstest]
+    #[case(INPUT_1, 2286)]
+    fn start_02_part2(#[case] input: &str, #[case] expected_output: i32) {
+        assert_eq!(part2(&input), expected_output);
+    }
 }

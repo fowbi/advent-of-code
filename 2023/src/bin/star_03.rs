@@ -5,7 +5,7 @@ fn contains_only_digits(input: &str) -> bool {
     input.chars().all(|c| c.is_digit(10) || c == '.')
 }
 
-fn part1(input: &str) {
+fn part1(input: &str) -> i32 {
     let mut total = 0;
     for (i, line) in input.lines().enumerate() {
         let re = Regex::new(r"\d+").unwrap();
@@ -31,7 +31,7 @@ fn part1(input: &str) {
         });
     };
 
-    println!("Day 2 Part 1: {}", total);
+    total
 }
 
 fn clean_up_line(input: &str) -> String {
@@ -48,7 +48,7 @@ fn clean_up_line(input: &str) -> String {
     output
 }
 
-fn part2(input: &str) {
+fn part2(input: &str) -> i32 {
     let mut total = 0;
 
     let lines: Vec<String> = input.lines().map(|line| String::from(clean_up_line(line))).collect();
@@ -107,10 +107,46 @@ fn part2(input: &str) {
         }
     });
 
-    println!("Day 2 Part 2: {}", total);
+    total
 }
 
 fn main() {
-    run(part1);
-    run(part2);
+    fn run_part1(input: &str) {
+        println!("Day 3 Part 1: {}", part1(input));
+    }
+    run(run_part1);
+
+    fn run_part2(input: &str) {
+        println!("Day 3 Part 2: {}", part2(input));
+    }
+    run(run_part2);
+}
+
+#[cfg(test)]
+mod tests {
+    use rstest::rstest;
+    use super::{part1, part2};
+
+    const INPUT_1: &str = "467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..";
+
+    #[rstest]
+    #[case(INPUT_1, 4361)]
+    fn star_02_part1(#[case] input: &str, #[case] expected_output: i32) {
+        assert_eq!(part1(&input), expected_output);
+    }
+
+    #[rstest]
+    #[case(INPUT_1, 467835)]
+    fn start_02_part2(#[case] input: &str, #[case] expected_output: i32) {
+        assert_eq!(part2(&input), expected_output);
+    }
 }
