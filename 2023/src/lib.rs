@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 use std::{env, fs};
+use std::clone::Clone;
 
 pub fn run(f: impl Fn(&str)) {
     let input = get_input();
@@ -46,4 +47,37 @@ fn make_path(bin_name: &str) -> PathBuf {
     path.set_extension("txt");
 
     path
+}
+
+#[derive(Debug, Clone)]
+pub struct Grd<T> {
+    pub points: Vec<T>,
+    pub width: usize,
+    pub height: usize,
+}
+
+#[allow(dead_code)]
+impl<T: Default + Clone> Grd<T> {
+    pub fn new(width: usize, height: usize) -> Self {
+        let points = vec![<T as Default>::default(); width * height];
+        return Self {
+            points,
+            width,
+            height,
+        };
+    }
+
+    pub fn at(&self, x: usize, y: usize) -> Option<&T> {
+        if x >= self.width || y >= self.height {
+            return None;
+        }
+        return Some(&self.points[y * self.width + x]);
+    }
+
+    pub fn set(&mut self, x: usize, y: usize, value: T) {
+        if x >= self.width || y >= self.height {
+            return;
+        }
+        self.points[y * self.width + x] = value;
+    }
 }
