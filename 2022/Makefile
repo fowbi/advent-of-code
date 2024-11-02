@@ -16,3 +16,6 @@ fetch-input-today: ## fetch AOC challenge input for given day, day is mandatory
 
 test: ## test AOC challenge for a given day, day is mandatory
 	@ go test "./star_$(shell printf "%02d" $(day))" -v
+
+tests: ## test all AOC challenges
+	@ go test ./...
