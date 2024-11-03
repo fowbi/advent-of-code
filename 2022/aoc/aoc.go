@@ -92,6 +92,10 @@ func (aoc *Aoc) SaveInput(day int, cookie string) (bool, error) {
 	if writeErr != nil {
 		return false, fmt.Errorf("failed writing input.txt: %v: %w", writeErr, ErrFailedAPICall)
 	}
+	writeErr = utils.WriteInput(filepath.Join(starFolder, "sample-input.txt"), []byte(""))
+	if writeErr != nil {
+		return false, fmt.Errorf("failed writing input-sample.txt: %v: %w", writeErr, ErrFailedAPICall)
+	}
 
 	return true, nil
 }

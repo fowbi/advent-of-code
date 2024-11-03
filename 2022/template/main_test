@@ -1,8 +1,12 @@
 package main
 
 import (
+	_ "embed"
 	"testing"
 )
+
+//go:embed sample-input.txt
+var sampleInput string
 
 func TestPart01(t *testing.T) {
 	cases := []struct {
@@ -11,11 +15,15 @@ func TestPart01(t *testing.T) {
 		want  int
 	}{
 		{
-			name:  "Actual input",
-			input: input, // input is defined in input.go
-			want:  1,     // Replace with the expected output.
+			name:  "Sample input",
+			input: sampleInput,
+			want:  1,
 		},
-		// add more samples here
+		{
+			name:  "Actual input",
+			input: input,
+			want:  1,
+		},
 	}
 
 	for _, tc := range cases {
@@ -34,11 +42,15 @@ func TestPart02(t *testing.T) {
 		want  int
 	}{
 		{
-			name:  "Actual input",
-			input: input, // input is defined in input.go
-			want:  1,     // Replace with the expected output.
+			name:  "Sample input",
+			input: sampleInput,
+			want:  1,
 		},
-		// add more samples here
+		{
+			name:  "Actual input",
+			input: input,
+			want:  1,
+		},
 	}
 
 	for _, tc := range cases {
