@@ -38,3 +38,23 @@ func ExtractNumbers(s string) ([]int, error) {
 
 	return numbers, nil
 }
+
+func DuplicateChars(s string) map[rune]int {
+	charMap := make(map[rune]int)
+
+	for _, char := range s {
+		charMap[char]++
+	}
+
+	return charMap
+}
+
+func HasDuplicateChars(s string) bool {
+	for _, count := range DuplicateChars(s) {
+		if count > 1 {
+			return true
+		}
+	}
+
+	return false
+}

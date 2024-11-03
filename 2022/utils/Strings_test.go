@@ -73,3 +73,61 @@ func TestExtractNumbers(t *testing.T) {
 		})
 	}
 }
+
+func TestDuplicateChars(t *testing.T) {
+	cases := []struct {
+		name      string
+		input     string
+		wantChars map[rune]int
+	}{
+		{
+			name:      "No duplicates found",
+			input:     "abc",
+			wantChars: map[rune]int{'c': 1, 'b': 1, 'a': 1},
+		},
+		{
+			name:      "Duplicates found",
+			input:     "abcadc",
+			wantChars: map[rune]int{'a': 2, 'b': 1, 'c': 2, 'd': 1},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			gotChars := DuplicateChars(tc.input)
+
+			require.Len(t, gotChars, len(tc.wantChars))
+
+			for k, v := range tc.wantChars {
+				if gotChars[k] != v {
+					t.Errorf("DuplicateChars(%s) = %v, want %v", tc.input, gotChars, tc.wantChars)
+				}
+			}
+		})
+	}
+}
+
+func TestHasDuplicateChars(t *testing.T) {
+	cases := []struct {
+		name           string
+		input          string
+		wantDuplicates bool
+	}{
+		{
+			name:           "No duplicates found",
+			input:          "abc",
+			wantDuplicates: false,
+		},
+		{
+			name:           "Duplicates found",
+			input:          "abcadc",
+			wantDuplicates: true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			require.Equal(t, tc.wantDuplicates, HasDuplicateChars(tc.input))
+		})
+	}
+}
