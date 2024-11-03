@@ -2,7 +2,6 @@ package main
 
 import (
 	_ "embed"
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -60,36 +59,6 @@ func TestPart02(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			if got := part_02(tc.input); got != tc.want {
 				t.Errorf("part_02 = %v, want %v", got, tc.want)
-			}
-		})
-	}
-}
-
-func TestExtractNumbers(t *testing.T) {
-	cases := []struct {
-		name        string
-		input       string
-		wantNumbers []int
-	}{
-		{
-			name:        "Sample input",
-			input:       "1-2,3-4",
-			wantNumbers: []int{4, 3, 2, 1},
-		},
-		{
-			name:        "Actual input",
-			input:       "abc123",
-			wantNumbers: []int{321},
-		},
-	}
-
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			gotNumbers, _ := extractNumbers(tc.input)
-
-			require.Len(t, gotNumbers, len(tc.wantNumbers))
-			if reflect.DeepEqual(gotNumbers, tc.wantNumbers) {
-				t.Errorf("extractNumbers(%s) = %v, want %v", tc.input, gotNumbers, tc.wantNumbers)
 			}
 		})
 	}

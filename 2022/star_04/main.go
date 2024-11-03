@@ -1,10 +1,9 @@
 package main
 
 import (
+	"aoc_2022/utils"
 	_ "embed"
 	"fmt"
-	"regexp"
-	"strconv"
 	"strings"
 )
 
@@ -90,7 +89,7 @@ func parseInput(input string) (pairs []SectionAssignmentPairs) {
 		if row == "" {
 			continue
 		}
-		numbers, _ := extractNumbers(row)
+		numbers, _ := utils.ExtractNumbers(row)
 		pairs = append(pairs, SectionAssignmentPairs{
 			first:  Pair{x: numbers[0], y: numbers[1]},
 			second: Pair{x: numbers[2], y: numbers[3]},
@@ -98,20 +97,4 @@ func parseInput(input string) (pairs []SectionAssignmentPairs) {
 	}
 
 	return pairs
-}
-
-func extractNumbers(s string) ([]int, error) {
-	re := regexp.MustCompile(`\d+`)
-	matches := re.FindAllString(s, -1)
-
-	var numbers []int
-	for _, match := range matches {
-		num, err := strconv.Atoi(match)
-		if err != nil {
-			return nil, err
-		}
-		numbers = append(numbers, num)
-	}
-
-	return numbers, nil
 }

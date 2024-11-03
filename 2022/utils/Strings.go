@@ -1,5 +1,10 @@
 package utils
 
+import (
+	"regexp"
+	"strconv"
+)
+
 func CommonChars(str1, str2 string) []rune {
 	charMap := make(map[rune]bool)
 	var common []rune
@@ -16,4 +21,20 @@ func CommonChars(str1, str2 string) []rune {
 	}
 
 	return common
+}
+
+func ExtractNumbers(s string) ([]int, error) {
+	re := regexp.MustCompile(`\d+`)
+	matches := re.FindAllString(s, -1)
+
+	var numbers []int
+	for _, match := range matches {
+		num, err := strconv.Atoi(match)
+		if err != nil {
+			return nil, err
+		}
+		numbers = append(numbers, num)
+	}
+
+	return numbers, nil
 }
