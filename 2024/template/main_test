@@ -1,0 +1,51 @@
+package main
+
+import (
+	"testing"
+)
+
+func TestPart01(t *testing.T) {
+	cases := []struct {
+		name  string
+		input string
+		want  int
+	}{
+		{
+			name:  "Actual input",
+			input: input, // input is defined in input.go
+			want:  1,     // Replace with the expected output.
+		},
+		// add more samples here
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := part_01(tc.input); got != tc.want {
+				t.Errorf("part_01 = %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestPart02(t *testing.T) {
+	cases := []struct {
+		name  string
+		input string
+		want  int
+	}{
+		{
+			name:  "Actual input",
+			input: input, // input is defined in input.go
+			want:  1,     // Replace with the expected output.
+		},
+		// add more samples here
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := part_02(tc.input); got != tc.want {
+				t.Errorf("part_02 = %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
