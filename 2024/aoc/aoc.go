@@ -82,7 +82,6 @@ func (aoc *Aoc) GetInput(day int, cookie string) ([]byte, error) {
 
 func (aoc *Aoc) SaveInput(day int, cookie string) (bool, error) {
 	starFolder := utils.StarFolder(day)
-	//inputBody := []byte("Hello, World!")
 	inputBody, err := aoc.GetInput(day, cookie)
 	if err != nil {
 		return false, err
@@ -91,6 +90,10 @@ func (aoc *Aoc) SaveInput(day int, cookie string) (bool, error) {
 	writeErr := utils.WriteInput(filepath.Join(starFolder, "input.txt"), inputBody)
 	if writeErr != nil {
 		return false, fmt.Errorf("failed writing input.txt: %v: %w", writeErr, ErrFailedAPICall)
+	}
+	writeErr = utils.WriteInput(filepath.Join(starFolder, "sample-input.txt"), []byte(""))
+	if writeErr != nil {
+		return false, fmt.Errorf("failed writing input-sample.txt: %v: %w", writeErr, ErrFailedAPICall)
 	}
 
 	return true, nil
