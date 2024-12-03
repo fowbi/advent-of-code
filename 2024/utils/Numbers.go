@@ -1,5 +1,7 @@
 package utils
 
+import "strconv"
+
 func FindLargestNumber(nums []int) int {
 	if len(nums) == 0 {
 		return 0
@@ -21,10 +23,17 @@ func Diff(a, b int) int {
 	}
 	return a - b
 }
+
 func UniqueValues(list []int) map[int]int {
 	dict := make(map[int]int)
 	for _, num := range list {
 		dict[num] = dict[num] + 1
 	}
 	return dict
+}
+
+func StringToNumber(s string) int {
+	num, _ := strconv.Atoi(s)
+
+	return num
 }
