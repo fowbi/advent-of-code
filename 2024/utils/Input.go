@@ -17,3 +17,15 @@ func InputToSlice(input string) []string {
 func InputToMap(input string) map[int]string {
 	return SliceToMap(InputToSlice(input))
 }
+
+func InputToMatrix(input string) [][]string {
+	matrix := [][]string{}
+	for _, row := range strings.Split(input, "\n") {
+		if row == "" {
+			continue
+		}
+		matrix = append(matrix, strings.Split(row, ""))
+	}
+
+	return matrix
+}
